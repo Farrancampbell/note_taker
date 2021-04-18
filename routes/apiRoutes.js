@@ -1,3 +1,4 @@
+const { response } = require("express")
 const fs = require("fs")
 const { request } = require("http")
 var path = require("path")
@@ -10,15 +11,23 @@ router.get("/notes", (require, response)=>{
     })
 })
 
-router.post("/notes", (require, response)=>{
-    response.sendFile(path.join(__dirname,"../db/db.json"))
-})
+// router.post("/notes", (require, response)=>{
+//     response.sendFile(path.join(__dirname,"../db/db.json"))
+// })
 
-router.post("/notes", (require, response) => {
-    fs.writeFile("db/db.json", JSON.stringify(request.body), (err) => {
-        if (err) throw err;
-        response.json("success");
-    });
+router.post("/notes", (req, response) => {
+    fs.readFile(path.join(__dirname,"../db/db.json"),"utf8",(error,data)=>{
+       var notes = JSON.parse(data)
+       console.log(req.body)
+       console.log(notes)
+       notes.push(req.body)
+       console.log(notes)
+        fs.writeFile("db/db.json", JSON.stringify(notes), (err) => {
+            if (err) throw err;
+            response.json("success");
+        });
+
+    })
 })
 router.delete("/notes/:id", (require, response) => {
     fs.readFile("../db/db.json", (err, data) => {
@@ -32,5 +41,13 @@ router.delete("/notes/:id", (require, response) => {
     })
 })
 
+router.post("/notes", (require, response) => {
+    const newNote = (request.body);
+    newNote.id = uniqid();
+    fs.writeFile("../db/db.json", JSON.stringify(req.body), (err) => {
+        if (err) throw err;
+        response.json("Success");
+    });
+})
 
 module.exports = router;
