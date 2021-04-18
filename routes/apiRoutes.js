@@ -14,12 +14,12 @@ router.post("/notes", (require, response)=>{
     response.sendFile(path.join(__dirname,"../db/db.json"))
 })
 
-router.post("/notes"), (require, response) => {
+router.post("/notes", (require, response) => {
     fs.writeFile("db/db.json", JSON.stringify(request.body), (err) => {
         if (err) throw err;
         response.json("success");
     });
-
+})
 router.delete("/notes/:id", (require, response) => {
     fs.readFile("../db/db.json", (err, data) => {
        const notesArray = JSON.parse(data);
@@ -28,9 +28,9 @@ router.delete("/notes/:id", (require, response) => {
 
        fs.writeFile("../db/db.json", JSON.stringify(filterArray), "utf8");
        response.sendStatus(200);
-
-    }
-}
+    
+    })
+})
 
 
 module.exports = router;
