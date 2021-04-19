@@ -6,7 +6,7 @@ const uniqid = require("uniqid")
 
 var router = require("express").Router()
 router.get("/notes", (require, response)=>{
-    fs.readFile(path.join(__dirname,"../db/db.json"),"utf8",(error,data)=>{
+    fs.readFile(path.join(__dirname,"../db/db.json"),"utf8",(err,data)=>{
         response.json(JSON.parse(data))
 
     })
@@ -17,7 +17,7 @@ router.get("/notes", (require, response)=>{
 // })
 
 router.post("/notes", (req, response) => {
-    fs.readFile(path.join(__dirname,"../db/db.json"),"utf8",(data)=>{
+    fs.readFile(path.join(__dirname,"../db/db.json"),"utf8",(err,data)=>{
         const newNote = (req.body);
         newNote.id = uniqid();
         var notes = JSON.parse(data)
