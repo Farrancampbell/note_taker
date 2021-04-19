@@ -17,11 +17,11 @@ router.get("/notes", (require, response)=>{
 // })
 
 router.post("/notes", (req, response) => {
-    fs.readFile(path.join(__dirname,"../db/db.json"),"utf8",(error,data)=>{
-        const newNote = (request.body);
+    fs.readFile(path.join(__dirname,"../db/db.json"),"utf8",(data)=>{
+        const newNote = (req.body);
         newNote.id = uniqid();
         var notes = JSON.parse(data)
-       console.log(newNote)
+        notes.push(newNote)
         fs.writeFile("db/db.json", JSON.stringify(notes), (err) => {
             if (err) throw err;
             response.json("success");
@@ -30,7 +30,7 @@ router.post("/notes", (req, response) => {
     })
 })
 router.delete("/notes/:id", (require, response) => {
-    fs.readFile("../db/db.json", (err, data) => {
+    fs.readFile("../db/db.json", (data) => {
        const notesArray = JSON.parse(data);
        const idNumber = require.params.id;
        const filterArray = notesArray.filter(note => note.id !== idNumber);
